@@ -9,5 +9,24 @@ pipeline {
                  sh script: 'mvn clean package'
             }
         }
+        stage('Upload War To Nexus'){
+            steps{
+                 nexusArtifactUploader artifacts: [
+                     [
+                         artifactId: 'simple-app', 
+                         classifier: '', 
+                         file: 'target/simple-app-1.0.0.war', 
+                         type: 'war'
+                     ]
+                 ], 
+                 credentialsId: 'Nexus', 
+                 groupId: 'in.javahome', 
+                 nexusUrl: '172.31.27.32:8081', 
+                 nexusVersion: 'nexus3', 
+                 protocol: 'http', 
+                 repository: 'http://18.217.140.102:8081/repository/project-release/', 
+                 version: '1.0.0'
+            }
+        }
     }
 }
